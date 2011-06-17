@@ -1,0 +1,58 @@
+@import "reset";
+@import "constants";
+
+body {
+  font-family: helvetica, arial, sans-serif;
+  color: $text-color;
+}
+
+#page {
+  width: $max-width;
+  margin: 0 auto;
+}
+
+#header {
+  font-family: 'Philosopher', helvetica, arial, sans-serif;
+  font-size: 80px;
+  text-align: center;
+
+  float: left;
+  width: 98%;
+  margin-top: 0.2em;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+@media screen and (max-width: 999px) {
+  #page {
+    width: 720px;
+  }
+}
+
+@media screen and (max-width: 719px) {
+  #page {
+    width: 100%;
+  }
+}
+
+.each-letter {
+  display: inline;
+}
+
+.greek-letter, .first-letter {
+  display: inline;
+  color: $highlighted-text-color;
+}
+
+.greek-letter {
+  font-family: 'Gentium Basic', serif;
+}
+
+.circle {
+  display: inline-block;
+  background-color: $text-color;
+  border-radius: 50%;
+  width: 0.2em;
+  height: 0.2em;
+  margin: 0 0.1em 0.15em 0.1em;
+}
