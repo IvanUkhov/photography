@@ -12,4 +12,6 @@ end
 
 group :development do
   gem 'thin', '~> 1.6.1'
+  gem 'capistrano', '~> 3.0', require: false, group: :development
+  gem 'capistrano-rails', '~> 1.1.0'
 end
