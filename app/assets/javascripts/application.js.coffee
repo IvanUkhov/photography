@@ -12,9 +12,6 @@ class Circle
   x: null
   y: null
 
-  targetX: null
-  targetY: null
-
   offset: null
   angle: null
 
@@ -37,15 +34,9 @@ class Circle
     @y = y
     @offset = width / 2
 
-  focus: (x, y) ->
-    @targetX = x
-    @targetY = y
-
-  tick: ->
-    return if @targetX == null || @targetY == null
-
-    dy = @targetY - (@y + @offset)
-    dx = @targetX - (@x + @offset)
+  move: (targetX, targetY) ->
+    dy = targetY - (@y + @offset)
+    dx = targetX - (@x + @offset)
 
     angle = @.computeAngle(dy, dx)
     angle = @angle + @.computeTilt(@angle, angle) if @angle != null
@@ -100,29 +91,27 @@ class Circle
 
     'rgb(' + r + ',' + g + ',' + b + ')'
 
+$('.each-letter').each ->
+  _this = $(this)
+  _this.html(_this.html().replace(
+    /\b([a-z])([a-z]+)?\b/gim,
+    "<span class='first-letter'>$1</span>$2"))
+
 circles = []
+distance = 0
+targetX = 0
+targetY = 0
 
-$(document).ready ->
-  $('.each-letter').each ->
-    _this = $(this)
-    _this.html(_this.html().replace(/\b([a-z])([a-z]+)?\b/gim, "<div class='first-letter'>$1</div>$2"))
+$(document).mousemove (e) ->
+  distance += Math.sqrt(
+    (e.pageX - targetX) * (e.pageX - targetX) +
+    (e.pageY - targetY) * (e.pageY - targetY))
 
-  setInterval (() => circle.tick() for circle in circles), 10
+  targetX = e.pageX
+  targetY = e.pageY
 
-  lastX = 0
-  lastY = 0
-  distance = 0
+  if distance > 1500
+    distance = 0
+    circles.push(new Circle($('#circle')))
 
-  $(document).mousemove (e)->
-    distance += Math.sqrt(
-      (e.pageX - lastX) * (e.pageX - lastX) +
-      (e.pageY - lastY) * (e.pageY - lastY))
-
-    lastX = e.pageX
-    lastY = e.pageY
-
-    if distance > 1000
-      distance = 0
-      circles.push(new Circle($('#circle')))
-
-    circle.focus e.pageX, e.pageY for circle in circles
+setInterval (() => circle.move(targetX, targetY) for circle in circles), 10

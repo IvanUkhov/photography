@@ -1,8 +1,13 @@
-@import "reset";
 @import "constants";
 
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 body {
-  font-family: helvetica, arial, sans-serif;
+  font-family: 'Philosopher', helvetica, arial, sans-serif;
   color: $text-color;
 }
 
@@ -12,8 +17,8 @@ body {
 }
 
 #header {
-  font-family: 'Philosopher', helvetica, arial, sans-serif;
   font-size: 80px;
+  font-weight: normal;
   text-align: center;
 
   float: left;
