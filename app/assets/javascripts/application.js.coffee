@@ -102,7 +102,7 @@ distance = 0
 targetX = 0
 targetY = 0
 
-$(document).mousemove (e) ->
+$(document).on 'mousemove', (e) ->
   distance += Math.sqrt(
     (e.pageX - targetX) * (e.pageX - targetX) +
     (e.pageY - targetY) * (e.pageY - targetY))
@@ -110,8 +110,15 @@ $(document).mousemove (e) ->
   targetX = e.pageX
   targetY = e.pageY
 
-  if distance > 1500
+  if distance > 2000
     distance = 0
     circles.push(new Circle($('#circle')))
+
+$(document).on 'click', (e) ->
+  targetX = e.pageX
+  targetY = e.pageY
+
+  distance = 0
+  circles.push(new Circle($('#circle')))
 
 setInterval (() => circle.move(targetX, targetY) for circle in circles), 10
