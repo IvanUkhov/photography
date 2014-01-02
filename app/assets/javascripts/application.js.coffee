@@ -114,7 +114,7 @@ $(document).on 'mousemove', (e) ->
     distance = 0
     circles.push(new Circle($('#circle')))
 
-$(document).on 'click', (e) ->
+$(document).on 'click touchstart', (e) ->
   targetX = e.pageX
   targetY = e.pageY
 
