@@ -2,16 +2,10 @@
 %html{ lang: 'en' }
   %head
     %meta{ charset: 'utf-8' }
-    %meta{ description: 'About Ivan Ukhov' }
-    %meta{ author: 'Ivan Ukhov' }
-
     = stylesheet_link_tag 'http://fonts.googleapis.com/css?family=Merienda%20One'
     = stylesheet_link_tag :application
-
     %link{ href: '/favicon.png', rel: 'icon', type: 'image/png' }
-
     %title Ivan Ukhov
-
   %body
     .state#alpha= yield
     .state#beta
