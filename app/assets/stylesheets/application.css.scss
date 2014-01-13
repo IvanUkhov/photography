@@ -1,52 +1,39 @@
-@import "constants";
-
 html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
 }
 
 body {
-  font-family: 'Merienda One', georgia, serif;
-  font-size: $font-size;
-  color: $text-color;
+  font-family: 'Cuprum', verdana, sans-serif;
+  font-size: 100px;
+  color: #fff;
 }
 
-h1 {
+#background {
+  width: 100%;
+  height: 2600px;
+  background-image: url('/background.jpg');
+  background-size: 2000px;
+}
+
+#foreground {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+#foreground h1 {
   font-size: 100%;
   font-weight: normal;
   text-align: center;
   white-space: nowrap;
-  padding: 0.4em 0 0 0;
-  margin: 0;
+  padding: 0;
+  margin: 0.1em 0;
 }
 
-#page {
-  width: $page-width;
-  margin: 0 auto;
-}
-
-.state {
+#foreground div {
+  background: #fff;
   width: 100%;
-  height: 2.25em;
-}
-
-#alpha0 {
-  background: $alpha0-color;
-}
-
-#alpha1 {
-  background: $alpha1-color;
-}
-
-#alpha2 {
-  background: $alpha2-color;
-}
-
-#alpha3 {
-  background: $alpha3-color;
-}
-
-#alpha4 {
-  background: $alpha4-color;
+  height: 1em;
 }
