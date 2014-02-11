@@ -6,6 +6,18 @@
     = stylesheet_link_tag :application
     %link{ href: '/favicon.png', rel: 'icon', type: 'image/png' }
     %title Ivan Ukhov
+    %script{ :type => 'text/javascript' }
+      :plain
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-47932672-4']);
+        _gaq.push(['_setDomainName', 'ivanukhov.com']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
   %body
     #page
       #background
