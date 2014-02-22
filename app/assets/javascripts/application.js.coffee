@@ -1,3 +1,13 @@
+Window = $(window)
+Document = $(document)
+
+class PrettyDate
+  @months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
+
+  @format = (date) ->
+    @months[date.getMonth()] + ' ' + date.getFullYear()
+
+
 class AbstractReader
   constructor: (id, key) ->
     @id = id
@@ -36,11 +46,12 @@ class AbstractReader
 class Photo
   constructor: (attributes) ->
     @url = attributes.url
-
     @width = attributes.width
     @height = attributes.height
-    @maxWidth = attributes.width
-    @maxHeight = attributes.height
+    @date = attributes.date
+
+    @maxWidth = @width
+    @maxHeight = @height
 
     @element = $('<img/>')
 
@@ -83,69 +94,83 @@ class Photo
 class PhotoReader extends AbstractReader
   append: (items) ->
     for item in items
-      if not item.hasOwnProperty('object') then continue
+      if not item.hasOwnProperty('verb') then continue
+      if not (item.verb is 'post') then continue
+
+      date = null
+      date = new Date item.published if item.published?
+
+      if not item.object? then continue
 
       post = item.object
 
-      if not post.hasOwnProperty('attachments') then continue
+      if not post.attachments? then continue
 
       for attachment in post.attachments
-        if not attachment.hasOwnProperty('objectType') then continue
+        if not attachment.objectType? then continue
         if not attachment.objectType is 'photo' then continue
-        if not attachment.hasOwnProperty('image') then continue
-        if not attachment.hasOwnProperty('fullImage') then continue
+        if not attachment.image? then continue
+        if not attachment.fullImage? then continue
 
         @collection.push new Photo \
           url: attachment.image.url,
           width: attachment.fullImage.width,
-          height: attachment.fullImage.height
+          height: attachment.fullImage.height,
+          date: date
 
     return
-
-Window = $(window)
-Document = $(document)
 
 class Gallery
   constructor: (selector) ->
     @container = $(selector)
-
-    windowWidth = Window.width()
-    @photoWidth = windowWidth * 3 / 4
-
-    widthIncrement = Math.round 3 * windowWidth / 4
-    containerWidth = windowWidth + widthIncrement
-    @container.width containerWidth
-
-    Window.on 'scroll', =>
-      newWidth = Document.scrollLeft() + Window.width() + 2 * widthIncrement
-      console.log newWidth
-      containerWidth = Math.max containerWidth, newWidth
-      @container.width containerWidth
-
-      return
+    @photoWidth = Window.width() * 3 / 4
 
   append: (photos) ->
     for photo in photos
+      if photo.date?
+        date = PrettyDate.format photo.date
+        if not (date is @date)
+          @container.append $('<header></header>').text(date)
+          @date = date
+
       photo.resize width: @photoWidth
 
-      wrapper = $('<section></section>')
-      wrapper.data id: @container.length
-      wrapper.append photo.element
-
-      @container.append wrapper
-      @distribute photo
+      section = $('<section></section>')
+      section.append photo.element
+      @container.append section
 
       photo.load()
 
     return
 
-  distribute: (photo) ->
-    return
-
-reader = new PhotoReader '103064709795548297840', 'AIzaSyCQTW4nkz-TvGn0cIdpAnyUAirISQbk2gA'
+reader = new PhotoReader '103064709795548297840', \
+  'AIzaSyCQTW4nkz-TvGn0cIdpAnyUAirISQbk2gA'
 gallery = new Gallery '#gallery'
 
-reader.next 10, (photos) ->
-  gallery.append photos
+busy = false
+
+extend = () ->
+  if busy then return
+
+  busy = true
+
+  reader.next 5, (photos) ->
+    gallery.append photos
+    busy = false
+
+    return
 
   return
+
+extend()
+
+Window.on 'scroll', =>
+  if Window.scrollTop() < Document.height() - 1.5 * Window.height() then return
+
+  extend()
+
+  return
+
+extend()
+
+$('#email').attr href: 'mailto:ivan.ukhov@gmail.com'

@@ -2,9 +2,19 @@
 %html{ lang: 'en' }
   %head
     %meta{ charset: 'utf-8' }
-    = stylesheet_link_tag :application
-    %link{ href: '/favicon.png', rel: 'icon', type: 'image/png' }
+    %meta{ name: 'description', content: 'Photography by Ivan Ukhov' }
+    %meta{ property: 'og:url', content: 'http://ivanukhov.com' }
+    %meta{ property: 'og:title', content: 'Ivan Ukhov' }
+    %meta{ property: 'og:type', content: 'profile' }
+    %meta{ property: 'og:description', content: 'Photography by Ivan Ukhov' }
+    %meta{ property: 'profile:first_name', content: 'Ivan' }
+    %meta{ property: 'profile:last_name', content: 'Ukhov' }
+    %meta{ property: 'profile:gender', content: 'male' }
     %title Ivan Ukhov
+    %link{ href: '/favicon.png', rel: 'icon', type: 'image/png' }
+    %script{ type: 'text/javascript', src:'//use.typekit.net/sfh6bkj.js' }
+    %script{ type: 'text/javascript' }= 'try{Typekit.load();}catch(e){}'
+    = stylesheet_link_tag :application
     %script{ :type => 'text/javascript' }
       :plain
         var _gaq = _gaq || [];
@@ -19,6 +29,7 @@
         })();
   %body
     %article#gallery
+    %footer &copy; 2014 <a id="email">Ivan Ukhov</a>
 
     = javascript_include_tag '//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'
     = javascript_include_tag :application

@@ -1,11 +1,53 @@
-html, body {
+* {
   margin: 0;
   padding: 0;
+  line-height: 1em;
+  font-family: 'omnes-pro', times, serif;
+  font-weight: 100;
+  font-size: 20pt;
+  color: #fff;
 }
 
-#gallery {
-  section {
-    float: left;
-    margin: 1em 0 0 1em;
+a, a:hover, a:visited {
+  color: #fff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a[href^=tel] {
+  color: #000;
+  text-decoration: none;
+}
+
+article#gallery {
+  text-align: center;
+
+  header {
+    margin: 0.7em 0 0.3em 0;
+    letter-spacing: 5pt;
+    font-size: 80pt;
+    color: #000;
+
+    &:first-child {
+      margin-top: 0.1em;
+    }
   }
+
+  section {
+    display: inline-block;
+    margin: 0 0 1em 0;
+  }
+}
+
+footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  text-align: center;
+  margin: 0 0 0.5em 0;
 }
