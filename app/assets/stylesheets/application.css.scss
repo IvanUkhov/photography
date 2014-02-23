@@ -5,6 +5,7 @@
   font-family: 'omnes-pro', times, serif;
   font-weight: 100;
   font-size: 20pt;
+  white-space: nowrap;
   color: #fff;
 }
 
@@ -37,8 +38,11 @@ article#gallery {
   }
 
   section {
-    display: inline-block;
     margin: 0 0 1em 0;
+
+    img {
+      cursor: pointer;
+    }
   }
 }
 
