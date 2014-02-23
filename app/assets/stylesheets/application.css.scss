@@ -3,8 +3,8 @@
   padding: 0;
   line-height: 1em;
   font-family: 'omnes-pro', times, serif;
-  font-weight: 100;
   font-size: 20pt;
+  font-weight: 200;
   white-space: nowrap;
   color: #fff;
 }
@@ -30,6 +30,7 @@ article#gallery {
     margin: 0.7em 0 0.3em 0;
     letter-spacing: 5pt;
     font-size: 80pt;
+    font-weight: 100;
     color: #000;
 
     &:first-child {
