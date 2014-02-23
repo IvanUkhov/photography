@@ -54,6 +54,7 @@ class Photo
     @maxHeight = @height
 
     @element = $('<img/>')
+    @element.css visibility: 'hidden'
 
   resize: (options) ->
     if not options? then options = Object
@@ -84,9 +85,15 @@ class Photo
   load: (options) ->
     newElement = $('<img/>')
     newElement.on 'load', =>
-      @element.promise().done =>
+      if @element.css('visibility') is 'hidden'
+        newElement.hide()
         @element.replaceWith newElement
         @element = newElement
+        newElement.fadeIn 1000
+      else
+        @element.promise().done =>
+          @element.replaceWith newElement
+          @element = newElement
 
     newElement.css width: @width, height: @height
     newElement.attr src: @url.replace /w\d+-h\d+/, "w#{ @width }-h#{ @height }"
@@ -183,12 +190,12 @@ gallery = new Gallery '#gallery'
 
 busy = false
 
-extend = () ->
+extend = (count) ->
   if busy then return
 
   busy = true
 
-  reader.next 5, (photos) ->
+  reader.next count, (photos) ->
     gallery.append photos
     busy = false
 
@@ -199,10 +206,10 @@ extend = () ->
 Window.on 'scroll', =>
   if Window.scrollTop() < Document.height() - 1.5 * Window.height() then return
 
-  extend()
+  extend 5
 
   return
 
-extend()
+extend 5
 
 $('#email').attr href: 'mailto:ivan.ukhov@gmail.com'
