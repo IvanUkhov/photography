@@ -59,7 +59,8 @@ class Photo
     @date = attributes.date
 
     @element = $('<img/>')
-    @element.css visibility: 'hidden'
+    @element.css opacity: 0
+    @initialized = false
 
   resize: (options) ->
     @width = Math.round options.width
@@ -75,6 +76,8 @@ class Photo
     return
 
   load: (options, callback) ->
+    url = @url.replace /w\d+-h\d+(-p)?/, "w#{ @width }"
+
     newElement = $('<img/>')
     newElement.on 'load', =>
       width = newElement.realWidth()
@@ -84,26 +87,24 @@ class Photo
         @width = width
         @maxWidth = width
 
-      if @element.css('visibility') is 'hidden'
-        newElement.hide()
-        @element.replaceWith newElement
-        @element = newElement
-        newElement.fadeIn 1000
+      if not @initialized
+        @initialized = true
+
+        @element.attr src: url
+        @element.animate { opacity: 1 }, 1000
         if callback? then callback()
 
       else if shrink
         @element.stop().animate { width: @width }, 500, =>
-          @element.replaceWith newElement
-          @element = newElement
+          @element.attr src: url
           if callback? then callback()
 
       else
         @element.promise().done =>
-          @element.replaceWith newElement
-          @element = newElement
+          @element.attr src: url
           if callback? then callback()
 
-    newElement.attr src: @url.replace /w\d+-h\d+(-p)?/, "w#{ @width }"
+    newElement.attr src: url
 
 class PhotoReader extends AbstractReader
   append: (items) ->
