@@ -1,5 +1,14 @@
 Window = $(window)
 Document = $(document)
+Body = $('body')
+
+
+$.fn.realWidth = ->
+  clone = @clone().css(visibility: 'hidden').appendTo(Body)
+  width = clone.width()
+  clone.remove()
+  return width
+
 
 class PrettyDate
   @months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
@@ -46,57 +55,55 @@ class AbstractReader
 class Photo
   constructor: (attributes) ->
     @url = attributes.url
-    @width = attributes.width
-    @height = attributes.height
+    @maxWidth = attributes.width
     @date = attributes.date
-
-    @maxWidth = @width
-    @maxHeight = @height
 
     @element = $('<img/>')
     @element.css visibility: 'hidden'
 
   resize: (options) ->
-    if not options? then options = Object
+    @width = Math.round options.width
 
-    if options.width? and options.height?
-      width = options.width
-      height = options.height
-    else if options.width? and not options.height?
-      width = Math.min @maxWidth, options.width
-      height = width / @maxWidth * @maxHeight
-    else if not options.width? and options.height?
-      height = Math.min @maxHeight, options.height
-      width = height / @maxHeight * @maxWidth
-    else
-      width = @width
-      height = @height
-
-    @width = Math.round width
-    @height = Math.round height
+    if @maxWidth?
+      @width = Math.min @maxWidth, @width
 
     if options.animate?
-      @element.stop().animate { width: @width, height: @height }, 500
+      @element.stop().animate { width: @width }, 500
     else
-      @element.css width: @width, height: @height
+      @element.css width: @width
 
     return
 
-  load: (options) ->
+  load: (options, callback) ->
     newElement = $('<img/>')
     newElement.on 'load', =>
+      width = newElement.realWidth()
+      shrink = width < @width
+
+      if shrink
+        @width = width
+        @maxWidth = width
+
       if @element.css('visibility') is 'hidden'
         newElement.hide()
         @element.replaceWith newElement
         @element = newElement
         newElement.fadeIn 1000
+        if callback? then callback()
+
+      else if shrink
+        @element.stop().animate { width: @width }, 500, =>
+          @element.replaceWith newElement
+          @element = newElement
+          if callback? then callback()
+
       else
         @element.promise().done =>
           @element.replaceWith newElement
           @element = newElement
+          if callback? then callback()
 
-    newElement.css width: @width, height: @height
-    newElement.attr src: @url.replace /w\d+-h\d+/, "w#{ @width }-h#{ @height }"
+    newElement.attr src: @url.replace /w\d+-h\d+(-p)?/, "w#{ @width }"
 
 class PhotoReader extends AbstractReader
   append: (items) ->
@@ -115,15 +122,31 @@ class PhotoReader extends AbstractReader
 
       for attachment in post.attachments
         if not attachment.objectType? then continue
-        if not attachment.objectType is 'photo' then continue
-        if not attachment.image? then continue
-        if not attachment.fullImage? then continue
 
-        @collection.push new Photo \
-          url: attachment.image.url,
-          width: attachment.fullImage.width,
-          height: attachment.fullImage.height,
-          date: date
+        if attachment.objectType is 'photo'
+          if not attachment.image? then continue
+
+          if attachment.fullImage?
+            @collection.push new Photo \
+              url: attachment.image.url,
+              width: attachment.fullImage.width,
+              date: date
+          else
+            @collection.push new Photo \
+              url: attachment.image.url,
+              width: null,
+              date: date
+
+        else if attachment.objectType is 'album'
+          if not attachment.thumbnails? then continue
+
+          for thumbnail in attachment.thumbnails
+            if not thumbnail.image? then continue
+
+            @collection.push new Photo \
+              url: thumbnail.image.url,
+              width: null,
+              date: date
 
     return
 
@@ -136,7 +159,11 @@ class Gallery
 
     @container.on 'click', 'img', (event) =>
       section = $(event.currentTarget).parent('section')
-      id = section.data('id')
+
+      busy = section.data 'busy'
+      if busy then return
+
+      id = section.data 'id'
 
       if @current is id
         photo = @collection[@current]
@@ -146,7 +173,10 @@ class Gallery
 
       if @current?
         photo = @collection[@current]
-        delta = photo.height - @photoWidth / photo.width * photo.height
+
+        height = photo.element.height()
+        delta = height - @photoWidth / photo.width * height
+
         photo.resize width: @photoWidth, animate: true
 
         if delta > 0 && @current < id
@@ -157,7 +187,9 @@ class Gallery
 
       photo = @collection[id]
       photo.resize width: newWidth, animate: true
-      photo.load()
+
+      section.data busy: true
+      photo.load {}, => section.data busy: false
 
       @current = id
 
@@ -189,25 +221,20 @@ reader = new PhotoReader '103064709795548297840', \
 gallery = new Gallery '#gallery'
 
 busy = false
-
 extend = (count) ->
   if busy then return
-
   busy = true
 
   reader.next count, (photos) ->
     gallery.append photos
     busy = false
-
     return
 
   return
 
 Window.on 'scroll', =>
-  if Window.scrollTop() < Document.height() - 1.5 * Window.height() then return
-
-  extend 5
-
+  limit = Document.height() - 1.5 * Window.height()
+  if Window.scrollTop() > limit then extend 5
   return
 
 extend 5
