@@ -41,7 +41,10 @@ class AbstractReader
     return
 
   load: (callback) ->
-    url = "https://www.googleapis.com/plus/v1/people/#{ @id }/activities/public?key=#{ @key }&pageToken=#{ @token }"
+    url = "https://www.googleapis.com/plus/v1/people/#{ @id }/activities/public?key=#{ @key }"
+
+    if @token
+      url = "#{ url }&pageToken=#{ @token }"
 
     jQuery.ajax(url: url).done (result) =>
       @append result.items
