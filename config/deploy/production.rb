@@ -3,7 +3,7 @@ set :stage, :production
 role :web, %w{ivan@ukhov}
 server 'ukhov', user: 'ivan', roles: %w{web app}
 
-set :deploy_to, '/home/ivan/projects/site'
+set :deploy_to, '/home/ivan/projects/photography'
 
 set :default_env, {
   GEM_HOME: '/usr/local/rvm/gems/ruby-2.1.0',
