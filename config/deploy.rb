@@ -1,5 +1,5 @@
-set :application, 'ukhov'
-set :repo_url, 'gitolite@ukhov.me:web/ukhov.git'
+set :application, 'photography'
+set :repo_url, 'gitolite@ukhov.me:web/photography.git'
 
 namespace :deploy do
   desc 'Restart application'
