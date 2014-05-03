@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
+  caches_page :index
+
   def index
-    render nothing: true, layout: 'application'
+    render file: 'layouts/application'
   end
 end
