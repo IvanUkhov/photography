@@ -1,7 +1,7 @@
 class window.GooglePlusReader
-  constructor: (id, key) ->
-    @id = id
-    @key = key
+  constructor: (options) ->
+    @id = options.id
+    @key = options.key
     @token = null
     @collection = []
     @position = 0
@@ -10,13 +10,13 @@ class window.GooglePlusReader
     nextPosition = @position + count
 
     if nextPosition <= @collection.length
-      callback @collection.slice @position, nextPosition if callback?
+      callback @collection.slice(@position, nextPosition) if callback?
       @position = nextPosition
       return
 
     @load =>
       nextPosition = Math.min nextPosition, @collection.length
-      callback @collection.slice @position, nextPosition if callback?
+      callback @collection.slice(@position, nextPosition) if callback?
       @position = nextPosition
 
     return

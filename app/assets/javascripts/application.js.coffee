@@ -1,101 +1,34 @@
 #= require googleplus.photoreader
+#= require photostream
 
-Window = $(window)
-Document = $(document)
+class Application
+  constructor: () ->
+    @reader = new GooglePlusPhotoReader \
+      id: '103064709795548297840',
+      key: 'AIzaSyCQTW4nkz-TvGn0cIdpAnyUAirISQbk2gA'
 
-class PrettyDate
-  @months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
+    @stream = new PhotoStream '#stream'
+    @busy = false
 
-  @format = (date) ->
-    @months[date.getMonth()] + ' ' + date.getFullYear()
+    @extend 5
 
-class Gallery
-  constructor: (selector) ->
-    @container = $(selector)
-    @photoWidth = 900
-    @collection = []
-    @current = null
-
-    @container.on 'click', 'img', (event) =>
-      section = $(event.currentTarget).parent('section')
-
-      busy = section.data 'busy'
-      if busy then return
-
-      id = section.data 'id'
-
-      if @current is id
-        photo = @collection[@current]
-        photo.resize width: @photoWidth, animate: true
-        @current = null
-        return
-
-      if @current?
-        photo = @collection[@current]
-
-        height = photo.element.height()
-        delta = height - @photoWidth / photo.width * height
-
-        photo.resize width: @photoWidth, animate: true
-
-        if delta > 0 && @current < id
-          $('body, html').animate { scrollTop: Window.scrollTop() - delta }, 500
-
-      newWidth = Math.round 0.98 * Window.width()
-      if newWidth < @photoWidth then return
-
-      photo = @collection[id]
-      photo.resize width: newWidth, animate: true
-
-      section.data busy: true
-      photo.load {}, => section.data busy: false
-
-      @current = id
-
+    $window = $(window)
+    $document = $(document)
+    $window.on 'scroll', =>
+      limit = $document.height() - 1.5 * $window.height()
+      @extend 5 if $window.scrollTop() > limit
       return
 
-  append: (photos) ->
-    for photo in photos
-      if photo.attributes.date?
-        date = PrettyDate.format photo.attributes.date
-        if not (date is @date)
-          @container.append $('<header></header>').text(date)
-          @date = date
+  extend: (count) ->
+    return if @busy
+    @busy = true
 
-      photo.resize width: @photoWidth
-
-      section = $('<section></section>')
-      section.data id: @collection.length
-      section.append photo.element
-
-      @collection.push photo
-      @container.append section
-
-      photo.load()
+    @reader.next count, (photos) =>
+      @stream.append photo for photo in photos
+      @busy = false
+      return
 
     return
 
-reader = new GooglePlusPhotoReader '103064709795548297840', \
-  'AIzaSyCQTW4nkz-TvGn0cIdpAnyUAirISQbk2gA'
-gallery = new Gallery '#gallery'
-
-busy = false
-extend = (count) ->
-  if busy then return
-  busy = true
-
-  reader.next count, (photos) ->
-    gallery.append photos
-    busy = false
-    return
-
-  return
-
-Window.on 'scroll', =>
-  limit = Document.height() - 1.5 * Window.height()
-  if Window.scrollTop() > limit then extend 5
-  return
-
-extend 5
-
+application = new Application
 $('#email').attr href: 'mailto:ivan.ukhov@gmail.com'
