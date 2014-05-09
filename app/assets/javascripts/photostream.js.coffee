@@ -6,33 +6,24 @@ class window.PhotoStream
     @photoWidth = 900
     @animationTime = 500
     @collection = []
-    @current = null
     @container.on 'click', 'img', (event) => @onClick(event)
 
   onClick: (event) ->
     element = $(event.currentTarget)
-    id = element.data 'id'
+    expanded = element.data 'expanded'
 
-    if @current?
-      current_id = @current.data 'id'
-
-      height = @current.height()
-      width = @current.width()
-
-      @current.stop().animate width: @photoWidth, @animationTime
-      @current = null
-
-      return if current_id == id
-
-      delta = height - @photoWidth / width * height
-      if delta > 0 && current_id < id
-        $('body, html').animate \
-          scrollTop: $(window).scrollTop() - delta, @animationTime
+    if expanded
+      element.data 'expanded', false
+      element.stop().animate width: @photoWidth, @animationTime
+      return
 
     newWidth = Math.round 0.98 * $(window).width()
     return if newWidth < @photoWidth
 
     element.animate width: newWidth, @animationTime
+
+    id = element.data 'id'
+    element.data 'expanded', true
 
     @collection[id].load width: newWidth, (newElement) =>
       realWidth = newElement.get().width
@@ -41,8 +32,6 @@ class window.PhotoStream
           element.attr src: newElement.attr('src')
       else
         element.attr src: newElement.attr('src')
-
-    @current = element
 
     return
 
