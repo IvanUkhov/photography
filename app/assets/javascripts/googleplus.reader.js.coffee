@@ -1,4 +1,4 @@
-class window.GooglePlusReader
+class Reader
   constructor: (options) ->
     @id = options.id
     @key = options.key
@@ -32,3 +32,6 @@ class window.GooglePlusReader
 
   append: (items) ->
     @collection.push item for item in items
+
+window.GooglePlus ||= {}
+window.GooglePlus.Reader = Reader

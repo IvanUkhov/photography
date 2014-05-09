@@ -1,4 +1,4 @@
-class window.GooglePlusPhoto
+class Photo
   constructor: (@attributes) ->
 
   load: (options, callback) ->
@@ -27,3 +27,6 @@ class window.GooglePlusPhoto
     element.attr src: url
 
     element
+
+window.GooglePlus ||= {}
+window.GooglePlus.Photo = Photo

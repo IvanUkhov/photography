@@ -3,7 +3,7 @@
 
 class Application
   constructor: () ->
-    @reader = new GooglePlusPhotoReader \
+    @reader = new GooglePlus.PhotoReader \
       id: '103064709795548297840',
       key: 'AIzaSyCQTW4nkz-TvGn0cIdpAnyUAirISQbk2gA'
 

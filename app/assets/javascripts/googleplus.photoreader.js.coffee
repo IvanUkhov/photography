@@ -1,7 +1,7 @@
 #= require googleplus.reader
 #= require googleplus.photo
 
-class window.GooglePlusPhotoReader extends window.GooglePlusReader
+class PhotoReader extends GooglePlus.Reader
   append: (items) ->
     for item in items
       continue unless item.hasOwnProperty('verb')
@@ -23,12 +23,12 @@ class window.GooglePlusPhotoReader extends window.GooglePlusReader
           continue unless attachment.image?
 
           if attachment.fullImage?
-            @collection.push new GooglePlusPhoto \
+            @collection.push new GooglePlus.Photo \
               url: attachment.image.url,
               width: attachment.fullImage.width,
               date: date
           else
-            @collection.push new GooglePlusPhoto \
+            @collection.push new GooglePlus.Photo \
               url: attachment.image.url,
               width: null,
               date: date
@@ -39,9 +39,12 @@ class window.GooglePlusPhotoReader extends window.GooglePlusReader
           for thumbnail in attachment.thumbnails
             continue unless thumbnail.image?
 
-            @collection.push new GooglePlusPhoto \
+            @collection.push new GooglePlus.Photo \
               url: thumbnail.image.url,
               width: null,
               date: date
 
     return
+
+window.GooglePlus ||= {}
+window.GooglePlus.PhotoReader = PhotoReader
