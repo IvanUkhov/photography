@@ -1,4 +1,3 @@
-#= require jquery.realwidth
 #= require prettydate
 
 class window.PhotoStream
@@ -36,7 +35,7 @@ class window.PhotoStream
     element.animate width: newWidth, @animationTime
 
     @collection[id].load width: newWidth, (newElement) =>
-      realWidth = newElement.realWidth()
+      realWidth = newElement.get().width
       if realWidth < newWidth
         element.stop().animate width: realWidth, @animationTime, ->
           element.attr src: newElement.attr('src')
