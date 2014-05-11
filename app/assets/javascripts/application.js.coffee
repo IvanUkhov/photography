@@ -31,4 +31,3 @@ class Application
     return
 
 application = new Application
-$('#email').attr href: 'mailto:ivan.ukhov@gmail.com'
