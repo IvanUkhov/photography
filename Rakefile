@@ -17,7 +17,7 @@ namespace :assets do
       '/application.css' => 'application.css'
     }.each do |path, file|
       _, _, source = application.call('PATH_INFO' => path)
-      File.open(File.join('public', file), 'w') { |f| f.write(source) }
+      File.open(File.join('public', file), 'w') { |f| f.write(source.to_s) }
     end
   end
 end
