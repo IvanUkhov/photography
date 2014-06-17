@@ -3,13 +3,13 @@ set :repo_url, 'gitolite@ukhov.me:web/photography.git'
 set :keep_releases, 2
 
 namespace :deploy do
-  desc 'Restart application'
+  desc 'Precompile static files'
   task :assets do
     on roles(:all) do
-      execute(:rake, 'assets:precompile')
+      execute "cd '#{ release_path }'; bundle exec rake assets:precompile"
     end
   end
 
   after :publishing, :cleanup
-  after :publishing, :restart
+  after :publishing, :assets
 end
