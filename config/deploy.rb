@@ -1,5 +1,5 @@
 set :application, 'photography'
-set :repo_url, 'gitolite@ukhov.me:web/photography.git'
+set :repo_url, 'https://github.com/IvanUkhov/photography.git'
 set :keep_releases, 2
 
 namespace :deploy do
