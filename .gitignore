@@ -1,6 +1,5 @@
 *.swp
 .DS_Store
-Gemfile.lock
 public/*.js
 public/*.css
 public/*.html

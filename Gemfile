@@ -14,4 +14,5 @@ group :development do
   gem 'thin', '~> 1.6.2'
 
   gem 'capistrano', '~> 3.2.1'
+  gem 'capistrano-bundler', '~> 1.1.2'
 end
