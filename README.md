@@ -1,2 +1,5 @@
 # Photography
-The source code of [this](http://ivanukhov.com) page.
+A demonstration of
+the [GooglePlus Reader](https://github.com/IvanUkhov/googleplus-reader) gem
+for streaming photos from [Google+](https://plus.google.com/).
+[Here](http://ivanukhov.com) it is live.
