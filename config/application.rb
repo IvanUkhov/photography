@@ -1,31 +1,48 @@
-require File.expand_path('../boot', __FILE__)
+require 'haml'
+require 'uglifier'
+require 'sprockets'
 
-# Pick the frameworks you want:
-# require "active_record/railtie"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "sprockets/railtie"
-# require "rails/test_unit/railtie"
+Haml::Options.defaults[:ugly] = true if ENV['production']
+Sprockets.register_engine('.haml', Tilt::HamlTemplate)
 
-# Require the gems listed in Gemfile, including any gems
-# you've limited to :test, :development, or :production.
-Bundler.require(:default, Rails.env)
+class Application
+  def call(env)
+    case env['PATH_INFO']
+    when '/'
+      pipeline = build_pipeline(env)
+      [ 200, {}, [ pipeline['application.html'].to_s ] ]
+    when /^.+(js|css)$/
+      pipeline = build_pipeline(env)
+      pipeline.call(env)
+    else
+      browser.call(env)
+    end
+  end
 
-module Me
-  class Application < Rails::Application
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+  private
 
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
+  def browser
+    @browser ||= Rack::Directory.new('public')
+  end
 
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
+  def build_pipeline(env)
+    pipeline = Sprockets::Environment.new
 
-    config.action_controller.page_cache_directory =
-      File.join Rails.root, 'public'
+    pipeline.append_path(gem_assets_path('googleplus-reader', 'javascripts'))
+    pipeline.append_path('app/assets/javascripts')
+    pipeline.append_path('app/assets/stylesheets')
+    pipeline.append_path('app/views/layouts')
+
+    if ENV['production']
+      pipeline.js_compressor = :uglifier
+      pipeline.css_compressor = :scss
+    end
+
+    pipeline
+  end
+
+  def gem_assets_path(name, *path)
+    gem = Gem::Specification.find_by_name(name)
+    File.join(gem.gem_dir, 'lib', 'assets', *path)
   end
 end
