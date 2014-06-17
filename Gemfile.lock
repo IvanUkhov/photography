@@ -61,6 +61,7 @@ DEPENDENCIES
   coffee-script (~> 2.2.0)
   googleplus-reader (~> 0.0.1)
   haml (~> 4.0.5)
+  rake (~> 10.3.2)
   redcarpet (~> 3.1.2)
   sass (~> 3.3.8)
   sprockets (~> 2.12.1)

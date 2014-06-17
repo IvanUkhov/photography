@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 
 group :assets do
+  gem 'rake', '~> 10.3.2'
+
   gem 'googleplus-reader', '~> 0.0.1'
 
   gem 'sprockets', '~> 2.12.1'

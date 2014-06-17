@@ -6,7 +6,9 @@ namespace :deploy do
   desc 'Precompile static files'
   task :assets do
     on roles(:all) do
-      execute "cd '#{ release_path }'; bundle exec rake assets:precompile"
+      within release_path do
+        execute :bundle, 'exec rake assets:precompile'
+      end
     end
   end
 
