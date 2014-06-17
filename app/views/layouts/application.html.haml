@@ -1,3 +1,4 @@
+- stamp = Time.now.to_i
 !!! 5
 %html{ lang: 'en' }
   %head
@@ -12,7 +13,7 @@
     %meta{ property: 'profile:gender', content: 'male' }
     %title Ivan Ukhov
     %link{ href: '/favicon.png', rel: 'icon', type: 'image/png' }
-    %link{ href: 'application.css', media: 'all', rel: 'stylesheet' }
+    %link{ href: "application.css?#{ stamp }", media: 'all', rel: 'stylesheet' }
     %script{ type: 'text/javascript', src: '//use.typekit.net/sfh6bkj.js' }
     %script{ type: 'text/javascript' }= 'try{Typekit.load();}catch(e){}'
     %script{ type: 'text/javascript' }
@@ -27,4 +28,4 @@
     %article#stream
     %footer &copy; 2014 <a href='&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#105;&#118;&#97;&#110;&#46;&#117;&#107;&#104;&#111;&#118;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'>Ivan Ukhov</a>
     %script{ type: 'text/javascript', src: '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js' }
-    %script{ type: 'text/javascript', src: '/application.js' }
+    %script{ type: 'text/javascript', src: "/application.js?#{ stamp }" }

@@ -7,6 +7,8 @@ end
 namespace :assets do
   desc 'Precompile static files'
   task :precompile do
+    ENV['production'] = '1'
+
     require 'rack'
     require File.expand_path('../config/application', __FILE__)
 
