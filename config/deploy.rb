@@ -4,9 +4,9 @@ set :keep_releases, 2
 
 namespace :deploy do
   desc 'Restart application'
-  task :restart do
-    on roles(:all), in: :sequence, wait: 5 do
-      execute :touch, release_path.join('tmp/restart.txt')
+  task :assets do
+    on roles(:all) do
+      execute(:rake, 'assets:precompile')
     end
   end
 
