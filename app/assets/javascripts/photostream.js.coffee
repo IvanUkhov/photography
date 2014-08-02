@@ -12,28 +12,38 @@ class window.PhotoStream
 
   onClick: (event) ->
     element = @$(event.currentTarget)
-    expanded = element.data('expanded')
 
-    if expanded
+    currentWidth = element.width()
+    currentHeight = element.height()
+
+    if element.data('expanded')
       element.data('expanded', false)
-      element.stop().animate(width: @photoWidth, @animationTime)
+      photoHeight = Math.round(@photoWidth / currentWidth * currentHeight)
+      element
+        .stop()
+        .animate(width: @photoWidth, height: photoHeight, @animationTime)
       return
 
     newWidth = Math.round(0.98 * @$(window).width())
+    newHeight = Math.round(newWidth / currentWidth * currentHeight)
+
     return if newWidth < @photoWidth
 
-    element.animate(width: newWidth, @animationTime)
+    element.animate(width: newWidth, height: newHeight, @animationTime)
 
     id = element.data('id')
     element.data('expanded', true)
 
     @collection[id].load(width: newWidth).done (newElement) =>
-      realWidth = newElement.get().width
+      realWidth = newElement.get(0).width
+      realHeight = newElement.get(0).height
 
       if realWidth < newWidth
-        element.stop().animate width: realWidth, @animationTime, ->
-          element.attr(src: newElement.attr('src'))
-          return
+        element
+          .stop()
+          .animate width: realWidth, height: realHeight, @animationTime, ->
+            element.attr(src: newElement.attr('src'))
+            return
       else
         element.attr(src: newElement.attr('src'))
 
