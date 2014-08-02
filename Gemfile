@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'googleplus-reader', '~> 0.0.3'
+gem 'googleplus-reader', '~> 0.0.4'
 
 gem 'rail', '~> 0.0.8'
 gem 'redcarpet', '~> 3.1.2'

@@ -26,8 +26,11 @@ class Application
     @busy = true
 
     @reader.next(count).done (photos) =>
-      @stream.append(photo) for photo in photos
-      @busy = false
+      promises = (@stream.append(photo) for photo in photos)
+      @$.when(promises).always =>
+        @busy = false
+        return
+
       return
 
     return

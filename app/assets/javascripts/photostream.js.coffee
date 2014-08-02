@@ -52,9 +52,10 @@ class window.PhotoStream
     section = @$('<section></section>')
       .appendTo(@container)
 
-    photo.load { width: @photoWidth }, (element) ->
+    photo.load(width: @photoWidth).done (element) ->
       element
         .data('id', id)
         .css(opacity: 0)
         .appendTo(section)
         .animate(opacity: 1, 1000)
+      return
