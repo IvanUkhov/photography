@@ -27,13 +27,17 @@ class window.PhotoStream
     id = element.data('id')
     element.data('expanded', true)
 
-    @collection[id].load width: newWidth, (newElement) =>
+    @collection[id].load(width: newWidth).done (newElement) =>
       realWidth = newElement.get().width
+
       if realWidth < newWidth
         element.stop().animate width: realWidth, @animationTime, ->
           element.attr(src: newElement.attr('src'))
+          return
       else
         element.attr(src: newElement.attr('src'))
+
+      return
 
     return
 
