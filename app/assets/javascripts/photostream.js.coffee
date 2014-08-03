@@ -8,6 +8,8 @@ class window.PhotoStream
     @photoWidth = 900
     @animationTime = 500
     @collection = []
+
+    @window = @$(window)
     @container.on('click', 'img', (event) => @onClick(event))
 
   onClick: (event) ->
@@ -24,10 +26,12 @@ class window.PhotoStream
         .animate(width: @photoWidth, height: photoHeight, @animationTime)
       return
 
-    newWidth = Math.round(0.98 * @$(window).width())
+    windowWidth = @window.width()
+
+    newWidth = Math.round(0.98 * windowWidth)
     newHeight = Math.round(newWidth / currentWidth * currentHeight)
 
-    return if newWidth < @photoWidth
+    return if newWidth < 1.1 * @photoWidth
 
     element.animate(width: newWidth, height: newHeight, @animationTime)
 
