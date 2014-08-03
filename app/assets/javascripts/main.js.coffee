@@ -13,6 +13,6 @@ requirejs ['application'], (Application) ->
   new Application()
   return
 
-requirejs ['typekit'], ->
+requirejs ['typekit'], (Typekit) ->
   Typekit.load()
   return
