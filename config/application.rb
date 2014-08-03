@@ -6,7 +6,9 @@ module Photography
     config.gems << 'googleplus-reader'
 
     config.precompile << 'application.css'
-    config.precompile << 'application.js'
+    config.precompile << 'main.js'
     config.precompile << 'index.html'
+
+    config.coffee_script.bare = true
   end
 end
