@@ -6,7 +6,7 @@ module Photography
     config.gems << 'googleplus-reader'
 
     config.precompile << 'application.css'
-    config.precompile << 'main.js'
+    config.precompile << 'application.js'
     config.precompile << 'index.html'
   end
 end
