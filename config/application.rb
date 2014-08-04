@@ -8,7 +8,5 @@ module Photography
     config.precompile << 'application.css'
     config.precompile << 'main.js'
     config.precompile << 'index.html'
-
-    config.coffee_script.bare = true
   end
 end
