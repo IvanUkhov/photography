@@ -18,17 +18,11 @@ a:hover {
   text-decoration: underline;
 }
 
-a[href^=tel] {
-  color: #000;
-  text-decoration: none;
-}
-
 article#stream {
   text-align: center;
 
   header {
     margin: 0.7em 0 0.3em 0;
-    letter-spacing: 5pt;
     font-size: 80pt;
     font-weight: 100;
     color: #000;
