@@ -4,3 +4,4 @@
 /public/*.css
 /public/*.html
 /Gemfile.lock
+/.sass-cache
