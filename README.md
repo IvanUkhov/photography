@@ -1,5 +1,8 @@
-# Photography
-A demonstration of
-the [GooglePlus Reader](https://github.com/IvanUkhov/googleplus-reader) gem
-for streaming photos from [Google+](https://plus.google.com).
-[Here](http://photography.ivanukhov.com) it is live.
+# Photos
+
+A demonstration of [GooglePlus Reader][1] for streaming photos from
+[Google+][2]. [Here][3] it is live.
+
+[1]: https://github.com/IvanUkhov/googleplus-reader
+[2]: https://plus.google.com
+[3]: http://photography.ivanukhov.com
