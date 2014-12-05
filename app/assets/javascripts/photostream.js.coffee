@@ -11,6 +11,9 @@ class window.PhotoStream
   onClick: (event) ->
     element = $(event.currentTarget)
 
+    activity_id = element.data('activity-id')
+    window.location.hash = "##{activity_id}"
+
     currentWidth = element.width()
     currentHeight = element.height()
 
@@ -68,7 +71,7 @@ class window.PhotoStream
 
     photo.load(width: @photoWidth).done (element) ->
       element
-        .data('id', id)
+        .data('id': id, 'activity-id': photo.attributes.activity_id)
         .css(opacity: 0)
         .appendTo(section)
         .animate(opacity: 1, 1000)
