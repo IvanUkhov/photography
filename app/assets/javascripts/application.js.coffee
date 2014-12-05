@@ -13,16 +13,33 @@ class Application
     @stream = new PhotoStream('#stream')
     @busy = false
 
-    @extend(5)
+    id = window.location.hash.substr(1)
+    if !!id
+      @find(id)
+    else
+      @next(5)
+      $window = $(window)
+      $document = $(document)
+      $window.on 'scroll', =>
+        limit = $document.height() - 1.5 * $window.height()
+        @next(5) if $window.scrollTop() > limit
+        return
 
-    $window = $(window)
-    $document = $(document)
-    $window.on 'scroll', =>
-      limit = $document.height() - 1.5 * $window.height()
-      @extend(5) if $window.scrollTop() > limit
+  find: (id) ->
+    return if @busy
+    @busy = true
+
+    @reader.find(id).done (photos) =>
+      promises = (@stream.append(photo) for photo in photos)
+      $.when(promises).always =>
+        @busy = false
+        return
+
       return
 
-  extend: (count) ->
+    return
+
+  next: (count) ->
     return if @busy
     @busy = true
 
