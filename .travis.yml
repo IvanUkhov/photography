@@ -1,0 +1,20 @@
+language: ruby
+sudo: false
+
+branches:
+  only: master
+
+script:
+  - RAIL_ENV=production rake assets
+
+after_success:
+  - pip install ghp-import --user ${USER}
+  - ${HOME}/.local/bin/ghp-import -m 'Update the content' -n public
+  - git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+
+env:
+  global:
+    secure: VZo12es2siu9htQJ1DmbPr1nC5wGMdlMIsTOWohLXV1dKUHvigwqLVNyVF7j0oTWuWkQJxBHBgmfKBmIL5XkdwIGaSJGAUBAFl8EwI+JDknvNzBesO6rGUDmK9AsZIjeqgVDTr847hld1vJwjaKcQthwBa7f8x9Kru7KHOfxk9A=
+
+notifications:
+  email: false
