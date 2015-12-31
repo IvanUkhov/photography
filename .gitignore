@@ -1,7 +1,6 @@
-*.swp
-.DS_Store
-/public/*.js
-/public/*.css
-/public/*.html
-/Gemfile.lock
+/.bundle
 /.sass-cache
+/Gemfile.lock
+/public/application.css
+/public/application.js
+/public/index.html
