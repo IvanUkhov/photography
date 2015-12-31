@@ -9,8 +9,8 @@ script:
 
 after_success:
   - pip install ghp-import --user ${USER}
-  - ${HOME}/.local/bin/ghp-import -m 'Update the content' -n public
   - git config user.name "Travis CI" && git config user.email ""
+  - ${HOME}/.local/bin/ghp-import -m 'Update the content' -n public
   - git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
 
 env:
