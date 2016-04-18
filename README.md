@@ -1,6 +1,6 @@
 # [Photos][1] [![Status][status-img]][status-url]
 
-Photography by Ivan Ukhov.
+Photography.
 
 [1]: http://photos.ivanukhov.com
 
