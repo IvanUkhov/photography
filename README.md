@@ -1,5 +1,7 @@
 # [Photos][1] [![Status][status-img]][status-url]
 
+Photography by Ivan Ukhov.
+
 [1]: http://photos.ivanukhov.com
 
 [status-img]: https://travis-ci.org/IvanUkhov/photos.svg?branch=master
