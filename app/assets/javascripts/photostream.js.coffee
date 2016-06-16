@@ -1,28 +1,31 @@
 class window.PhotoStream
-  constructor: (selector) ->
+  constructor: (selector, options = {}) ->
     @container = $(selector)
     @photoWidth = 900
-    @animationTime = 500
+    @resizeTime = 500
+    @appearTime = 1000
     @collection = []
+    @responsive = options.responsive
+    @parsimonious = options.parsimonious
 
     @window = $(window)
-    @container.on('click', 'img', (event) => @onClick(event))
+    @container.on('click', 'img', (event) => @onClick(event)) if @responsive
 
   onClick: (event) ->
-    element = $(event.currentTarget)
+    target = $(event.currentTarget)
 
-    activity_id = element.data('activity-id')
+    activity_id = target.data('activity-id')
     window.location.hash = "##{activity_id}"
 
-    currentWidth = element.width()
-    currentHeight = element.height()
+    currentWidth = target.width()
+    currentHeight = target.height()
 
-    if element.data('expanded')
-      element.data('expanded', false)
+    if target.data('expanded')
+      target.data('expanded', false)
       photoHeight = Math.round(@photoWidth / currentWidth * currentHeight)
-      element
+      target
         .stop()
-        .animate(width: @photoWidth, height: photoHeight, @animationTime)
+        .animate(width: @photoWidth, height: photoHeight, @resizeTime)
       return
 
     windowWidth = @window.width()
@@ -32,23 +35,29 @@ class window.PhotoStream
 
     return if newWidth < 1.1 * @photoWidth
 
-    element.animate(width: newWidth, height: newHeight, @animationTime)
+    target.animate(width: newWidth, height: newHeight, @resizeTime)
 
-    id = element.data('id')
-    element.data('expanded', true)
+    id = target.data('id')
+    target.data('expanded', true)
 
-    @collection[id].load(width: newWidth).done (newElement) =>
-      realWidth = newElement.get(0).width
-      realHeight = newElement.get(0).height
+    if @parsimonious
+      promise = @collection[id].load(width: newWidth)
+    else
+      promise = @collection[id].load()
+
+    promise.done (element) =>
+      realWidth = element.get(0).width
+      realHeight = element.get(0).height
 
       if realWidth < newWidth
-        element
+        target
           .stop()
-          .animate width: realWidth, height: realHeight, @animationTime, ->
-            element.attr(src: newElement.attr('src'))
+          .animate width: realWidth, height: realHeight, @resizeTime, ->
+            target.attr(src: element.attr('src'))
             return
+
       else
-        element.attr(src: newElement.attr('src'))
+        target.attr(src: element.attr('src'))
 
       return
 
@@ -69,10 +78,18 @@ class window.PhotoStream
     section = $('<section></section>')
       .appendTo(@container)
 
-    photo.load(width: @photoWidth).done (element) ->
+    if @parsimonious
+      promise = photo.load(width: @photoWidth)
+    else
+      promise = photo.load()
+
+    promise.done (element) =>
+      width = Math.min(@photoWidth, element.get(0).width)
       element
         .data('id': id, 'activity-id': photo.attributes.activity_id)
-        .css(opacity: 0)
+        .css(opacity: 0, width: "#{width}px")
         .appendTo(section)
-        .animate(opacity: 1, 1000)
+        .animate(opacity: 1, @appearTime)
       return
+
+    return
