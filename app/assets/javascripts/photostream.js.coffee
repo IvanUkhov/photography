@@ -1,9 +1,12 @@
 class window.PhotoStream
+  PHOTO_WIDTH: 900
+  RESIZE_TIME: 500
+  APPEAR_TIME: 1000
+  EXPANSION_FRACTION: 0.98
+  EXPANSION_THRESHOLD: 1.1
+
   constructor: (selector, options = {}) ->
     @container = $(selector)
-    @photoWidth = 900
-    @resizeTime = 500
-    @appearTime = 1000
     @collection = []
     @responsive = options.responsive
     @parsimonious = options.parsimonious
@@ -22,28 +25,29 @@ class window.PhotoStream
 
     if target.data('expanded')
       target.data('expanded', false)
-      photoHeight = Math.round(@photoWidth / currentWidth * currentHeight)
+      photoHeight = Math.round(@PHOTO_WIDTH / currentWidth * currentHeight)
       target
         .stop()
-        .animate(width: @photoWidth, height: photoHeight, @resizeTime)
+        .animate(width: @PHOTO_WIDTH, height: photoHeight, @RESIZE_TIME)
       return
 
     windowWidth = @window.width()
 
-    newWidth = Math.round(0.98 * windowWidth)
+    newWidth = Math.round(@EXPANSION_FRACTION * windowWidth)
     newHeight = Math.round(newWidth / currentWidth * currentHeight)
 
-    return if newWidth < 1.1 * @photoWidth
+    return if newWidth < @EXPANSION_THRESHOLD * @PHOTO_WIDTH
 
-    target.animate(width: newWidth, height: newHeight, @resizeTime)
+    target.animate(width: newWidth, height: newHeight, @RESIZE_TIME)
 
     id = target.data('id')
     target.data('expanded', true)
 
-    if @parsimonious
-      promise = @collection[id].load(width: newWidth)
+    photo = @collection[id]
+    if @parsimonious || not photo.attributes.width?
+      promise = photo.load(width: newWidth)
     else
-      promise = @collection[id].load()
+      promise = photo.load(width: photo.attributes.width)
 
     promise.done (element) =>
       realWidth = element.get(0).width
@@ -52,7 +56,7 @@ class window.PhotoStream
       if realWidth < newWidth
         target
           .stop()
-          .animate width: realWidth, height: realHeight, @resizeTime, ->
+          .animate width: realWidth, height: realHeight, @RESIZE_TIME, ->
             target.attr(src: element.attr('src'))
             return
 
@@ -72,24 +76,22 @@ class window.PhotoStream
           .appendTo(@container)
         @date = date
 
-    id = @collection.length
-    @collection.push(photo)
-
     section = $('<section></section>')
       .appendTo(@container)
 
-    if @parsimonious
-      promise = photo.load(width: @photoWidth)
+    id = @collection.length
+    @collection.push(photo)
+
+    if @parsimonious || not photo.attributes.width?
+      promise = photo.load(width: @PHOTO_WIDTH)
     else
-      promise = photo.load()
+      promise = photo.load(width: photo.attributes.width)
 
     promise.done (element) =>
-      width = Math.min(@photoWidth, element.get(0).width)
+      width = Math.min(@PHOTO_WIDTH, element.get(0).width)
       element
         .data('id': id, 'activity-id': photo.attributes.activity_id)
         .css(opacity: 0, width: "#{width}px")
         .appendTo(section)
-        .animate(opacity: 1, @appearTime)
+        .animate(opacity: 1, @APPEAR_TIME)
       return
-
-    return

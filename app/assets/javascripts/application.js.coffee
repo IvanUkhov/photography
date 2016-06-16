@@ -15,6 +15,9 @@
 `
 
 class Application
+  BATCH_SIZE: 5
+  REFILL_THRESHOLD: 1.5
+
   constructor: ->
     @reader = new GooglePlus.PhotoReader
       id: '103064709795548297840',
@@ -29,14 +32,15 @@ class Application
     id = window.location.hash.substr(1)
     if !!id
       @find(id)
-    else
-      @next(5)
-      $window = $(window)
-      $document = $(document)
-      $window.on 'scroll', =>
-        limit = $document.height() - 1.5 * $window.height()
-        @next(5) if $window.scrollTop() > limit
-        return
+      return
+
+    @next(@BATCH_SIZE)
+    $window = $(window)
+    $document = $(document)
+    $window.on 'scroll', =>
+      limit = $document.height() - @REFILL_THRESHOLD * $window.height()
+      @next(@BATCH_SIZE) if $window.scrollTop() > limit
+      return
 
   find: (id) ->
     return if @busy
@@ -58,7 +62,7 @@ class Application
 
     @reader.next(count).done (photos) =>
       promises = (@stream.append(photo) for photo in photos)
-      $.when(promises).always =>
+      $.when.apply($, promises).always =>
         @busy = false
         return
 
