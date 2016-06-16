@@ -16,18 +16,18 @@
     %meta{ property: 'profile:gender', content: 'male' }
     %title Ivan Ukhov | Photography
     %link{ href: "application.css?#{stamp}", rel: 'stylesheet' }
-    %script{ src: '//use.typekit.net/sfh6bkj.js', async: true, onload: 'try{Typekit.load();}catch(e){}' }
+    %script{ src: 'https://use.typekit.net/sfh6bkj.js', async: true, onload: 'try{Typekit.load();}catch(e){}' }
     %script
       :plain
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
         ga('create', 'UA-47932672-4', { 'siteSpeedSampleRate': 100 });
         ga('send', 'pageview');
     %link{ href: 'favicon.png', rel: 'icon', type: 'image/png' }
   %body
     %article#stream
     %footer &copy; 2011&ndash;2016 <a href="#{encode('mailto:ivan.ukhov@gmail.com')}">Ivan Ukhov</a>
-    %script{ src: '//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js' }
+    %script{ src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js' }
     %script{ src: "application.js?#{stamp}" }
