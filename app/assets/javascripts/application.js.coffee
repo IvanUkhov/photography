@@ -15,13 +15,15 @@
 `
 
 class Application
+  GOOGLEPLUS_ID: '103064709795548297840'
+  GOOGLEPLUS_KEY: 'AIzaSyCQTW4nkz-TvGn0cIdpAnyUAirISQbk2gA'
   BATCH_SIZE: 5
   REFILL_THRESHOLD: 1.5
 
   constructor: ->
     @reader = new GooglePlus.PhotoReader
-      id: '103064709795548297840',
-      key: 'AIzaSyCQTW4nkz-TvGn0cIdpAnyUAirISQbk2gA'
+      id: @GOOGLEPLUS_ID,
+      key: @GOOGLEPLUS_KEY,
 
     @stream = new PhotoStream '#stream',
       responsive: not $.browser.mobile,
@@ -48,7 +50,7 @@ class Application
 
     @reader.find(id).done (photos) =>
       promises = (@stream.append(photo) for photo in photos)
-      $.when(promises).always =>
+      $.when.apply($, promises).always =>
         @busy = false
         return
 
