@@ -18,7 +18,7 @@ class Application
   GOOGLEPLUS_ID: '103064709795548297840'
   GOOGLEPLUS_KEY: 'AIzaSyCQTW4nkz-TvGn0cIdpAnyUAirISQbk2gA'
   BATCH_SIZE: 5
-  REFILL_THRESHOLD: 1.5
+  REFILL_THRESHOLD: 3
 
   constructor: ->
     @reader = new GooglePlus.PhotoReader
