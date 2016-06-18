@@ -4,6 +4,7 @@ class window.PhotoStream
   APPEAR_TIME: 1000
   EXPANSION_FRACTION: 0.98
   EXPANSION_THRESHOLD: 1.1
+  REFERENCE_THRESHOLD: 0.9
 
   constructor: (selector, options = {}) ->
     @container = $(selector)
@@ -17,8 +18,12 @@ class window.PhotoStream
   onClick: (event) ->
     target = $(event.currentTarget)
 
-    activity_id = target.data('activity-id')
-    window.location.hash = "##{activity_id}"
+    offset = target.offset();
+    x = (event.pageX - offset.left) / target.width();
+    y = (event.pageY - offset.top) / target.height();
+    if x > @REFERENCE_THRESHOLD and y > @REFERENCE_THRESHOLD
+      activity_id = target.data('activity-id')
+      window.location.hash = "##{activity_id}"
 
     currentWidth = target.width()
     currentHeight = target.height()
