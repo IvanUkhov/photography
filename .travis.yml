@@ -8,7 +8,7 @@ script:
   - RAIL_ENV=production rake assets
 
 after_success:
-  - pip install ghp-import --user ${USER}
+  - pip install ghp-import --user
   - git config user.name "Travis CI" && git config user.email ""
   - ${HOME}/.local/bin/ghp-import -m 'Update the content' -n public
   - git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
