@@ -2,20 +2,20 @@ language: ruby
 sudo: false
 
 rvm:
-  - 2.3.1
+  - 2.3.4
 
 script:
   - RAIL_ENV=production rake assets
 
-after_success:
-  - pip install ghp-import --user
-  - git config user.name "Travis CI" && git config user.email ""
-  - ${HOME}/.local/bin/ghp-import -m 'Update the content' -n public
-  - git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+deploy:
+  github_token: "$GITHUB_TOKEN"
+  local_dir: public
+  provider: pages
+  skip_cleanup: true
 
 env:
   global:
-    secure: VZo12es2siu9htQJ1DmbPr1nC5wGMdlMIsTOWohLXV1dKUHvigwqLVNyVF7j0oTWuWkQJxBHBgmfKBmIL5XkdwIGaSJGAUBAFl8EwI+JDknvNzBesO6rGUDmK9AsZIjeqgVDTr847hld1vJwjaKcQthwBa7f8x9Kru7KHOfxk9A=
+    secure: fXNxPUz26WJVPCPgMHps4Em8SnL6T1d67DGzluURnX9ceWoYgrLNK/gS0XQB6m/goAlFUSpFI4OghFWvwGmc66S8vrL4pUSt5iMn+3PzeYu+SvM04Kvb8VK2X+DXtys828s4vv9jf8N0EEa0QA9XdvaoJD63oMEG212L8vxFw0s=
 
 notifications:
   email: false
